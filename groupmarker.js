@@ -617,8 +617,6 @@ function checkMarkingStatus(){
     })
   })
   .then(() => {
-    console.log(marks)
-    console.log(maxPossibleMarks)
     if (marks == maxPossibleMarks){
       db.collection("groups").where("project", "==", projCode).where("groupid", "==", groupID)
       .get()

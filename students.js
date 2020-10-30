@@ -129,7 +129,7 @@ function submitForm(){
       querySnapshot.forEach(function (doc) {
         if (students.includes(doc.data().username)){
           console.log(doc.data())
-          newProj = doc.data().projects;
+          let newProj = doc.data().projects;
           if (newProj.length == 0){
             newProj += projectSelection
           }
@@ -139,11 +139,24 @@ function submitForm(){
           db.collection("users").doc(doc.id).update({
             projects: newProj
           })
-          newGroups = doc.data().projgroup
+          let newUnits = doc.data().units;
+          if (!newUnits.includes(unitSelection)){
+            if (newUnits.length == 0){
+              newUnits += unitSelection
+            }
+            else{
+              newUnits += ", " + unitSelection
+            }
+          }
+          db.collection("users").doc(doc.id).update({
+            units: newUnits
+          })
+          let newGroups = doc.data().projgroup
           newGroups[projectSelection] = groupID;
           db.collection("users").doc(doc.id).update({
             projgroup: newGroups
           })
+
           .then(()=>{
             i += 1;
             if (i == students.length){
