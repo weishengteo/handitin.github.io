@@ -347,21 +347,23 @@ function displayAddMember(){
   .get()
   .then(function(querySnapshot) {
     querySnapshot.forEach(function (doc) {
-      let units = doc.data().units
-      let unitlist = units.split(", ")
+      if (doc.data().username != "admin"){
+        let units = doc.data().units
+        let unitlist = units.split(", ")
 
-      if (unitlist.includes(unitCode)){
-        let userGroups = doc.data().projgroup
-        if (!userGroups.hasOwnProperty(projCode)){
-          noGroups.push(doc.data().username)
+        if (unitlist.includes(unitCode)){
+          let userGroups = doc.data().projgroup
+          if (!userGroups.hasOwnProperty(projCode)){
+            noGroups.push(doc.data().username)
+          }
         }
-      }
 
-      let ret = "<option value='Select' hidden>Select</option>";
-      for (let i = 0; i < noGroups.length; i++){
-        ret += "<option value='" + noGroups[i] + "'>" + noGroups[i] + "</option>";
+        let ret = "<option value='Select' hidden>Select</option>";
+        for (let i = 0; i < noGroups.length; i++){
+          ret += "<option value='" + noGroups[i] + "'>" + noGroups[i] + "</option>";
+        }
+        document.getElementById('userAdd').innerHTML = ret
       }
-      document.getElementById('userAdd').innerHTML = ret
     });
   })
 }
@@ -598,6 +600,58 @@ function deleteStudent(){
   })
 }
 
+function checkMarkingStatus(){
+  let marks = 0;
+  let maxPossibleMarks = 0;
+  db.collection("users")
+  .get()
+  .then(function(querySnapshot) {
+    querySnapshot.forEach(function (doc) {
+      if (doc.data().projgroup[projCode] == groupID){
+        maxPossibleMarks += 1;
+        if (doc.data().projgroupmarks[projCode] != ""){
+          marks += 1;
+        }
+      }
+    })
+  })
+  .then(() => {
+    if (marks == maxPossibleMarks){
+      db.collection("groups").where("project", "==", projCode).where("groupid", "==", groupID)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          db.collection("groups").doc(doc.id).update({
+            markingStatus: "Marked"
+          })
+        })
+      })
+    }
+    else if (marks > 0 && marks < maxPossibleMarks){
+      db.collection("groups").where("project", "==", projCode).where("groupid", "==", groupID)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          db.collection("groups").doc(doc.id).update({
+            markingStatus: "In Progress"
+          })
+        })
+      })
+    }
+    else if (marks == 0){
+      db.collection("groups").where("project", "==", projCode).where("groupid", "==", groupID)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          db.collection("groups").doc(doc.id).update({
+            markingStatus: "Not Marked"
+          })
+        })
+      })
+    }
+  })
+}
+
 // Function calls
 let user = retrieveUserInfo();
 let projCode = retrieveProjectCode();
@@ -615,6 +669,7 @@ printMembers();
 displayMember();
 displayAddMember();
 displayDeleteMember();
+checkMarkingStatus();
 
 // TODO: add code for entering the contribution into the database by adding a new entry into the
 // firestore "groups" collection under the "contributions" tab (based on the user's group)
