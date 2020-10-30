@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+  <link rel='stylesheet' href='https://code.getmdl.io/1.3.0/material.indigo-pink.min.css'>
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <!-- Wide card with share menu button -->
+  <style>
+
+  body:before {
+    content: "";
+    position: absolute;
+    background: url("https://i.pinimg.com/originals/db/40/29/db40298be238e42530eaa9655e425096.jpg");
+    background-size: cover;
+    z-index: -1; /* Keep the background behind the content */
+    height: 20%; width: 20%;
+
+    transform: scale(5);
+    transform-origin: top left;
+    filter: blur(0.5px);
+  }
+  .mdl-layout__header .mdl-layout__drawer-button,
+  .mdl-layout__header-row{
+    background: black;
+  }
+  .demo-card-wide.mdl-card {
+    width: 1200px;
+  }
+  .demo-card-wide > .mdl-card__title {
+    color: #fff;
+    height: 176px;
+  }
+  .demo-card-wide > .mdl-card__menu {
+    color: #fff;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+  }
+  .project-text {
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 32px;
+    color: black;
+    font-family: 'Raleway',sans-serif;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+    text-align: left
+  }
+  .body-text {
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 24px;
+    color: black;
+    font-family: 'Raleway',sans-serif;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1
+  }
+  .mdl-layout__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .page-content {
+    background-color: rgb(0,0,0);
+    background-color: white;
+    border: 1px solid #000000;
+    position: absolute;
+    top: 5%;
+    z-index: 2;
+    width: 80%;
+    padding: 20px;
+  }
+  .projecttable {
+    clear: both;
+  }
+  .mdl-data-table {
+    width: 100%
+  }
+  #task-table {
+    width: 700px;
+  }
+  .mdl-dialog__title {
+    font-size: 30px;
+  }
+  .form {
+    display: block;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  form
+  {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    width: 100%;
+  }
+ </style>
+ <body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-firestore.js"></script>
+
+  <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <span class="mdl-layout-title">Hand it in</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+          <!-- Navigation. We hide it in small screens. -->
+          <nav class="mdl-navigation mdl-layout--large-screen-only">
+            <a class="mdl-navigation__link" href="homemarker.html">Home</a>
+            <a class="mdl-navigation__link" href="unitslistmarker.html">Units</a>
+            <a class="mdl-navigation__link" href="projectslistmarker.html">Projects</a>
+            <a class="mdl-navigation__link" href="students.html">Students</a>
+            <a class="mdl-navigation__link" href="profilemarker.html">Profile</a>
+          </nav>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Hand it in</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="homemarker.html">Home</a>
+          <a class="mdl-navigation__link" href="unitslistmarker.html">Units</a>
+          <a class="mdl-navigation__link" href="projectslistmarker.html">Projects</a>
+          <a class="mdl-navigation__link" href="students.html">Students</a>
+          <a class="mdl-navigation__link" href="profilemarker.html">Profile</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+
+        <div class="page-content">
+
+          <div id="temp" class="project-text">Project</div><br>
+
+          <div>
+            <img src="https://42f2671d685f51e10fc6-b9fcecea3e50b3b59bdc28dead054ebc.ssl.cf5.rackcdn.com/illustrations/Work_time_re_hdyv.svg" width="500" style="float: center;" />
+            <br><br><br>
+            <div id="temp" class ="body-text">Project details</div><br><br>
+            <div id="projectinfo"></div>
+          </div>
+
+          <div class="projecttable">
+            <br><br>
+            <div id="temp" class="body-text">Tasks</div><br><br>
+            <div id="tasktablecontent"></div><br><br>
+          </div>
+
+            <button type="button" class="mdl-button mdl-js-button mdl-button--raised add-task">Add task</button>
+            <dialog class="mdl-dialog" id = "dialogTask">
+              <h5 class="mdl-dialog__title">Adding a new task</h5>
+              <div class="mdl-dialog__content">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="j-source" pattern="[A-Z,a-z,0-9, ]*">
+                  <label class="mdl-textfield__label" for="j-source">Task Name</label>
+                  <span class="mdl-textfield__error">Letters, numbers and spaces only</span>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="j-destination" pattern="[A-Z,a-z,0-9, ]*">
+                  <label class="mdl-textfield__label" for="j-destination">Task Description</label>
+                  <span class="mdl-textfield__error">Letters, numbers and spaces only</span>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="j-dest2" pattern="[A-Z,a-z,0-9, ]*">
+                  <label class="mdl-textfield__label" for="j-destination">Comments</label>
+                  <span class="mdl-textfield__error">Letters, numbers and spaces only</span>
+                </div>
+                  <h5>Assigned to:</h5>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:100%">
+                  <select class="mdl-textfield__input" id="members" for="members" onchange="selectMember(this)"></select>
+                </div>
+              </div>
+              <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+                <button type="button" class="mdl-button submit">Submit</button>
+                <button type="button" class="mdl-button close">Cancel</button>
+              </div>
+            </dialog>
+
+            <div class="dialogTask">
+              <div id="taskDialogID"></div>
+            </div>
+
+            <div class="projecttable">
+              <br><br>
+              <div id="temp" class="body-text">Contributions</div><br>
+              <div id="tablecontent"></div>
+            </div><br><br>
+
+
+            <div id="addContributionsForm">
+              <div class="form">
+              <div class="demo-card-wide mdl-card mdl-shadow--2dp" style="width:100%;">
+                <div class="mdl-card__title">
+                  <h2 style="text-align:center;color:black;width:100%"><b>Add Contributions</b></h2>
+                </div>
+
+                <div>
+                  <img src="https://i2.wp.com/css-tricks.com/wp-content/uploads/2018/04/react-svg-component-library-7.png?ssl=1" width="500" height="300"/>
+                </div>
+
+                <div class="mdl-card__supporting-text">
+                  <div style="color:black">
+                    <!-- <div class="formtask"> -->
+                  <form action="#">
+                      <br>
+                      <h4><b>Task Name:</b></h4>
+                      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:100%">
+                        <select class="mdl-textfield__input" id="task" for="task" onchange="selectTask(this)"></select>
+                      </div>
+                      <br>
+                      <h4><b>Hours Contributed:</b></h4>
+                      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:100%">
+                        <input class="mdl-textfield__input" type="number" id="j-hours" pattern="[A-Z,a-z,0-9, ]*">
+                        <label class="mdl-textfield__label" for="j-source">Hours Contributed</label>
+                        <span class="mdl-textfield__error">Letters, numbers and spaces only</span>
+                      </div>
+                      <br>
+                      <h4><b>Remarks:</b></h4>
+                      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:100%">
+                        <input class="mdl-textfield__input" type="text" id="j-remarks" pattern="[A-Z,a-z,0-9, ]*">
+                        <label class="mdl-textfield__label" for="j-source">Remarks</label>
+                        <span class="mdl-textfield__error">Letters, numbers and spaces only</span>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div><br>
+                <!-- button to submit -->
+                <button style="margin:auto;width:200px;height:auto;display:block;" class="mdl-button mdl-js-button mdl-button--raised" onclick="addContributions()">Submit</button>
+                <br>
+                </div>
+              </div>
+
+              <dialog class="mdl-dialog" id = "dialogContribution">
+                <h5 class="mdl-dialog__title">Edit contribution</h5>
+                <div class="mdl-dialog__content">
+                  <br><b>Task Name:</b>
+                  <select class="mdl-textfield__input" id="contributiontaskname" for="task" onchange=""></select>
+
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <div style="font-size:14px"><br><b>Hours Contributed:</b></div>
+                    <input class="mdl-textfield__input" type="text" id="c-hours" pattern="[A-Z,a-z,0-9, ]*">
+                    <!-- <label class="mdl-textfield__label" for="c-hours">Hours contributed</label> -->
+                    <span class="mdl-textfield__error">Letters, numbers and spaces only</span>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">                    <div style="font-size:14px"><br><b>Remarks:</b></div>
+                    <input class="mdl-textfield__input" type="text" id="c-remarks" pattern="[A-Z,a-z,0-9, ]*">
+                    <!-- <label class="mdl-textfield__label" for="c-remarks">Remarks</label> -->
+                    <span class="mdl-textfield__error">Letters, numbers and spaces only</span>
+                  </div>
+                </div>
+              <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+                <button type="button" class="mdl-button submitcontri" id="contrisubmit">Submit</button>
+                <button type="button" class="mdl-button closecontri" id="contricancel">Cancel</button>
+              </div>
+            </dialog>
+
+          </div>
+
+        </div>
+      </main>
+    </div>
+    <div id="member-toast-example" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+    <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+  </body>
+  <script src="project.js"></script>
+  </html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+  <link rel='stylesheet' href='https://code.getmdl.io/1.3.0/material.indigo-pink.min.css'>
+  <style>
+  body {
+    font-family: Arial;
+    color: white;
+    line-height: 10px;
+  }
+
+  .split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+
+  .left {
+    left: 0;
+    background-image: url(https://preview.redd.it/t8e060j1i8751.jpg?auto=webp&s=a3944f8817f9e597203a95f3e563f909e025033e);
+    background-position: center center;
+    background-size: cover;
+  }
+
+  .right {
+    right: 0;
+    background-image: url(http://handitin.ga/wp-content/uploads/2020/09/test.jpg);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .centered img {
+    width: 150px;
+    border-radius: 50%;
+  }
+
+  .centered h2 {
+    font-family: "Arial Black", Gadget, sans-serif;
+    text-shadow: 6px 6px 18px #000000;
+  }
+
+  *{
+    margin: 0;
+    padding: 0;
+  }
+
+  .container{
+    width: 450px;
+    margin: 30px auto;
+    border-style: solid;
+    border-color: black;
+  }
+
+  .signup,
+  .login{
+    width: 50%;
+    background: #fff;
+    float: left;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: black;
+  }
+
+  .signup-form,
+  .login-form{
+    background: #fff;
+    padding: 40px;
+    clear: both;
+    width: 100%;
+    box-sizing: border-box;
+    height: 470px;
+  }
+
+  .select,
+  .input{
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 25px;
+    border: 2px solid #e9eaea;
+    color: #3e3e40;
+    font-size: 14px;
+    outline: none;
+    transform: all 0.5s ease;
+  }
+
+  .rolelabel{
+    color: black;
+    font-size: 15px;
+  }
+
+  .input:focus{
+    border: 2px solid #404191;
+  }
+
+  .loginbtn,
+  .submit,
+  .btn{
+    width: 100%;
+    background: #404191;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-bottom: 30px;
+  }
+
+  span a{
+    text-decoration: none;
+    color: #000;
+  }
+
+  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #3e3e40;
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+    color: #3e3e40;
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+    color: #3e3e40;
+  }
+  :-moz-placeholder { /* Firefox 18- */
+    color: #3e3e40;
+  }
+  </style>
+  <script defer src='https://code.getmdl.io/1.3.0/material.min.js'></script>
+
+  <title>Hand it in </title>
+  <link href="https://fonts.googleapis.com/css?family=Manjari&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+</head>
+<body>
+  <!-- The core FireStore JS SDK -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-firestore.js"></script>
+
+  <div class="split left">
+    <div class="centered">
+      <h2><b>Welcome to Hand it in!</b></h2>
+      <p>Please login to your account or sign up to continue.</p>
+    </div>
+  </div>
+
+  <div class="split right">
+    <div class="centered">
+      <img src="https://avatars3.githubusercontent.com/u/30190529?s=460&u=fd2a93754e61c747ee24d980edf94073b3a0ea10&v=4" alt="Avatar">
+      <div class="wrapper">
+        <div class="container">
+
+          <div class="signup">Sign Up</div>
+          <div class="login">Log In</div>
+            <div class="signup-form">
+              <input type="text" placeholder="Your Email Address" class="input" name="email" id="email"><br />
+              <input type="text" placeholder="Choose a Username (Used to login)" class="input" name="username" id="username"><br />
+              <input type="password" placeholder="Choose a Password" class="input" name="password" id="password"><br />
+              <input type="password" placeholder="Confirm Password" class="input" name="cfmpassword" id="cfmpassword"><br />
+              <button type="submit" name="submit" class="submit" value="Create account" onclick="register()" id="submit">Create account</button>
+            </div>
+
+          <div class="login-form">
+            <input type="text" placeholder="Username" class="input" id="userlogin"><br />
+            <input type="password" placeholder="Password" class="input" id="passlogin"><br />
+            <button type="login" name="login" class="loginbtn" value="Login" onclick="login()" id="login">Login</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+  </div>
+  <script src="login.js"></script>
+</body>
+</html>

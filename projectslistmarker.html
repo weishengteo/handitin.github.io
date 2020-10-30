@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+  <link rel='stylesheet' href='https://code.getmdl.io/1.3.0/material.indigo-pink.min.css'>
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <!-- Wide card with share menu button -->
+  <style>
+
+  body:before {
+    content: "";
+    position: absolute;
+    background: url("https://i.pinimg.com/originals/db/40/29/db40298be238e42530eaa9655e425096.jpg");
+    background-size: cover;
+    z-index: -1; /* Keep the background behind the content */
+    height: 20%; width: 20%;
+
+    transform: scale(5);
+    transform-origin: top left;
+    filter: blur(0.5px);
+  }
+  .mdl-layout__header .mdl-layout__drawer-button,
+  .mdl-layout__header-row{
+    background: black;
+  }
+  .demo-card-wide.mdl-card {
+    width: 1200px;
+  }
+  .demo-card-wide > .mdl-card__title {
+    color: #fff;
+    height: 176px;
+  }
+  .demo-card-wide > .mdl-card__menu {
+    color: #fff;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+  }
+  .project-text {
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 32px;
+    color: black;
+    font-family: 'Raleway',sans-serif;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1
+  }
+  .mdl-layout__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .page-content {
+    background-color: rgb(0,0,0);
+    background-color: white;
+    border: 1px solid #000000;
+    position: absolute;
+    top: 5%;
+    z-index: 2;
+    width: 80%;
+    padding: 20px;
+  }
+  .studentimage{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .mdl-tabs__tab{
+    width: 100%;
+  }
+  .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after {
+    height: 1.2px;
+    background: black;
+  }
+  .mdl-data-table {
+    width: 100%
+  }
+  </style>
+  <body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-firestore.js"></script>
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <span class="mdl-layout-title">Hand it in</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+          <!-- Navigation. We hide it in small screens. -->
+          <nav class="mdl-navigation mdl-layout--large-screen-only">
+            <a class="mdl-navigation__link" href="homemarker.html">Home</a>
+            <a class="mdl-navigation__link" href="unitslistmarker.html">Units</a>
+            <a class="mdl-navigation__link" href="projectslistmarker.html">Projects</a>
+            <a class="mdl-navigation__link" href="students.html">Students</a>
+            <a class="mdl-navigation__link" href="profilemarker.html">Profile</a>
+          </nav>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Hand it in</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="homemarker.html">Home</a>
+          <a class="mdl-navigation__link" href="unitslistmarker.html">Units</a>
+          <a class="mdl-navigation__link" href="projectslistmarker.html">Projects</a>
+          <a class="mdl-navigation__link" href="students.html">Students</a>
+          <a class="mdl-navigation__link" href="profilemarker.html">Profile</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+
+        <div class="page-content">
+          <div class="project-text"><b>Projects</b></div>
+          <div class = "mdl-tabs mdl-js-tabs">
+            <div class = "mdl-tabs__tab-bar">
+              <a href = "#tab1-panel" class = "mdl-tabs__tab is-active">Project list</a>
+              <a href = "#tab2-panel" class = "mdl-tabs__tab">Create a new project</a>
+            </div>
+
+            <div class = "mdl-tabs__panel is-active" id = "tab1-panel">
+              <h4><b>Unit Name:</b></h4>
+              <div id="unitFilterArea"></div>
+              <button style="margin:auto;width:200px;height:auto;display:block;" class="mdl-button mdl-js-button mdl-button--raised" onclick="printProjects(1)" id="filterUnitButton" disabled>Filter by unit</button>
+              <div id="projectListArea"></div>
+            </div>
+
+            <div class = "mdl-tabs__panel" id = "tab2-panel">
+              <div class="form">
+                <h2 style="text-align:center;color:black;width:100%"><b>Create a new project</b></h2>
+
+                <!-- Image -->
+                <div>
+                  <img src="https://pbs.twimg.com/media/Dq6yj5QXQAAmLOQ.jpg" width="500" height="300" class="studentimage"/>
+                </div>
+
+                <div id="createProjectArea"></div>
+                <p style="color:red">∗ Note: If you cannot find the unit you want, please navigate to the "Units" tab to create it</p>
+
+                <h4><b>Project Name:</b></h4>
+                <div class="mdl-textfield mdl-js-textfield" style="width:100%">
+                  <input class="mdl-textfield__input" type="text" id="projectName">
+                  <label class="mdl-textfield__label" for="projectName">Project Name</label>
+                </div>
+
+                <h4><b>Project ID:</b></h4>
+                <div class="mdl-textfield mdl-js-textfield" style="width:100%">
+                  <input class="mdl-textfield__input" type="text" id="projectId">
+                  <label class="mdl-textfield__label" for="projectId">Project ID</label>
+                </div>
+
+                <h4><b>Marker Name:</b></h4>
+                <div class="mdl-textfield mdl-js-textfield" style="width:100%">
+                  <input class="mdl-textfield__input" type="text" id="markerName">
+                  <label class="mdl-textfield__label" for="markerName">Marker Name</label>
+                </div>
+
+                <h4><b>Weightage:</b></h4>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:100%">
+                  <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="weightage">
+                  <label class="mdl-textfield__label" for="weightage">Weightage</label>
+                  <span class="mdl-textfield__error">Input is not a number!</span>
+                </div>
+                <button style="margin:auto;width:200px;height:auto;display:block;" class="mdl-button mdl-js-button mdl-button--raised" onclick="submitForm()">Submit</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script src="projectslistmarker.js"></script>
+  </html>
